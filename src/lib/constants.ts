@@ -11,4 +11,4 @@
  * }
  * ```
  */
-export const browser = typeof window !== 'undefined'
+export const browser = typeof window !== 'undefined';

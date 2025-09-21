@@ -1,20 +1,21 @@
-import { ComponentProps } from 'react'
-import { useTheme } from './theme-provider'
-import { Button } from './ui/button'
+import { ComponentProps } from 'react';
+
+import { useTheme } from './theme-provider';
+import { Button } from './ui/button';
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from './ui/dropdown-menu'
-import { Icon } from './ui/icon'
+  DropdownMenuTrigger
+} from './ui/dropdown-menu';
+import { Icon } from './ui/icon';
 
 export function ThemeToggle({
-  variant = 'outline',
+  variant = 'outline'
 }: {
-  variant: ComponentProps<typeof Button>['variant']
+  variant: ComponentProps<typeof Button>['variant'];
 }) {
-  const { setTheme } = useTheme()
+  const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -26,16 +27,10 @@ export function ThemeToggle({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme('light')}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
-          System
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

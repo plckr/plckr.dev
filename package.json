@@ -9,8 +9,10 @@
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
-    "format": "prettier",
-    "check": "prettier --write . && eslint --fix"
+    "check-types": "tsc --noEmit",
+    "validate": "pnpm run prettier:check && pnpm run check-types",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write ."
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
