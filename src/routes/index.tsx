@@ -14,8 +14,10 @@ function App() {
         <div className="fade flex w-full flex-col items-center justify-start py-8 tracking-tight sm:pr-0 md:items-start md:pr-6 lg:pr-0">
           <div className="flex items-center gap-4">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <a href="https://github.com/plckr/" target="_blank" rel="noopener noreferrer">
+                <AvatarImage src="https://avatars.githubusercontent.com/u/11768109" />
+                <AvatarFallback>RR</AvatarFallback>
+              </a>
             </Avatar>
 
             <div>
