@@ -21,7 +21,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="plckr.dev-theme">
-      <main className="bg-background mx-4 mt-2 mb-40 antialiased sm:mt-8 md:max-w-full lg:mx-auto lg:max-w-2xl">
+      <main className="bg-background mx-4 mt-2 mb-40 px-4 antialiased sm:mt-8 sm:max-w-screen-lg sm:px-6 md:mx-auto md:max-w-2xl md:px-8">
         <Outlet />
       </main>
     </ThemeProvider>
