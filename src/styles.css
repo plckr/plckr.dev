@@ -129,7 +129,11 @@ code {
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-none;
+
+    &:focus-visible {
+      @apply border-ring ring-ring/50 ring-[3px] outline-none;
+    }
   }
   body {
     @apply bg-background text-foreground;
