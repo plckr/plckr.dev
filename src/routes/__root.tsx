@@ -27,7 +27,7 @@ function RootComponent() {
       <main className="bg-background mx-4 mt-2 mb-40 px-4 antialiased sm:mt-8 sm:max-w-screen-lg sm:px-6 md:mx-auto md:max-w-2xl md:px-8">
         <header className="flex flex-col items-start justify-start pt-8 pb-12">
           <div className="flex items-center gap-4 pl-4 sm:pl-0">
-            <Avatar>
+            <Avatar className="size-10">
               <a href="https://github.com/plckr/" target="_blank" rel="noopener noreferrer">
                 <AvatarImage src="https://avatars.githubusercontent.com/u/11768109" />
                 <AvatarFallback>RR</AvatarFallback>
