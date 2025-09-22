@@ -2,9 +2,18 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { FileRouteTypes } from '@/routeTree.gen';
 import { TanstackDevtools } from '@tanstack/react-devtools';
-import { HeadContent, Link, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
+import {
+  HeadContent,
+  Link,
+  Outlet,
+  Scripts,
+  createRootRoute,
+  useMatchRoute
+} from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { ComponentProps } from 'react';
 
 import appCss from '../styles.css?url';
 
@@ -22,6 +31,19 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  const matchRoute = useMatchRoute();
+
+  const navLinks: { title: string; to: FileRouteTypes['fullPaths'] }[] = [
+    {
+      title: 'about',
+      to: '/'
+    },
+    {
+      title: 'blog',
+      to: '/blog'
+    }
+  ];
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="plckr.dev-theme">
       <main className="mx-4 mt-2 mb-40 px-4 sm:mt-8 sm:max-w-screen-lg sm:px-6 md:mx-auto md:max-w-2xl md:px-8">
@@ -42,12 +64,18 @@ function RootComponent() {
 
           <nav className="mt-8 flex w-full items-center justify-between gap-2 sm:my-4 sm:justify-end">
             <div className="inline-flex items-center gap-2">
-              <Button variant="ghost" asChild>
-                <Link to="/">about</Link>
-              </Button>
-              <Button variant="ghost" asChild>
-                <Link to="/blog">blog</Link>
-              </Button>
+              {navLinks.map((link) => {
+                const isActive = matchRoute({ to: link.to });
+                const buttonVariant: ComponentProps<typeof Button>['variant'] = isActive
+                  ? 'outline'
+                  : 'ghost';
+
+                return (
+                  <Button variant={buttonVariant} asChild>
+                    <Link to={link.to}>{link.title}</Link>
+                  </Button>
+                );
+              })}
             </div>
 
             <ThemeToggle variant="ghost" />
