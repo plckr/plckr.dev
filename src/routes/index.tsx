@@ -1,8 +1,6 @@
-import { ThemeToggle } from '@/components/theme-toggle';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
   component: App
@@ -11,36 +9,7 @@ export const Route = createFileRoute('/')({
 function App() {
   return (
     <>
-      <header className="flex flex-col items-start justify-start py-8">
-        <div className="flex items-center gap-4 pl-4 sm:pl-0">
-          <Avatar>
-            <a href="https://github.com/plckr/" target="_blank" rel="noopener noreferrer">
-              <AvatarImage src="https://avatars.githubusercontent.com/u/11768109" />
-              <AvatarFallback>RR</AvatarFallback>
-            </a>
-          </Avatar>
-
-          <div>
-            <p className="text-medium inline-block font-medium">Ricardo Reis</p>
-            <p className="opacity-60">full stack engineer</p>
-          </div>
-        </div>
-
-        <nav className="mt-8 flex w-full items-center justify-between gap-2 sm:my-4 sm:justify-end">
-          <div className="inline-flex items-center gap-2">
-            <Button variant="ghost" asChild>
-              <Link to="/">about</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/">blog</Link>
-            </Button>
-          </div>
-
-          <ThemeToggle variant="ghost" />
-        </nav>
-      </header>
-
-      <section className="py-5 text-base/relaxed text-zinc-800 dark:text-zinc-200">
+      <section className="text-base/relaxed text-zinc-800 dark:text-zinc-200">
         <p className="text-zinc-800 dark:text-zinc-200">Hi, I'm Ricardo.</p>
 
         <p className="mt-5">
@@ -59,7 +28,7 @@ function App() {
         </p>
       </section>
 
-      <footer className="mt-4 flex gap-4">
+      <footer className="mt-9 flex gap-4">
         <Button variant="outline" asChild>
           <a href="https://github.com/plckr/" target="_blank" rel="noopener noreferrer">
             <Icon.Github />
