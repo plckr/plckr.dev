@@ -49,11 +49,11 @@ function RootComponent() {
       <main className="mx-4 mt-2 mb-40 px-4 sm:mt-8 sm:max-w-screen-lg sm:px-6 md:mx-auto md:max-w-2xl md:px-8">
         <header className="flex flex-col items-start justify-start pt-8 pb-12">
           <div className="flex items-center gap-4 pl-4 sm:pl-0">
-            <Avatar className="size-10">
-              <a href="https://github.com/plckr/" target="_blank" rel="noopener noreferrer">
+            <Avatar asChild className="size-10">
+              <Link to="/">
                 <AvatarImage src="https://avatars.githubusercontent.com/u/11768109" />
                 <AvatarFallback>RR</AvatarFallback>
-              </a>
+              </Link>
             </Avatar>
 
             <div>
@@ -65,7 +65,7 @@ function RootComponent() {
           <nav className="mt-8 flex w-full items-center justify-between gap-2 sm:my-4 sm:justify-end">
             <div className="inline-flex items-center gap-2">
               {navLinks.map((link) => {
-                const isActive = matchRoute({ to: link.to });
+                const isActive = matchRoute({ to: link.to, fuzzy: true });
                 const buttonVariant: ComponentProps<typeof Button>['variant'] = isActive
                   ? 'outline'
                   : 'ghost';
