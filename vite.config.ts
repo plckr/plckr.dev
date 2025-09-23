@@ -15,7 +15,13 @@ const config = defineConfig({
       customViteReactPlugin: true
     }),
     viteReact()
-  ]
+  ],
+  optimizeDeps: {
+    include: ['@mdx-js/react', '@mdx-js/mdx']
+  },
+  ssr: {
+    noExternal: ['@mdx-js/mdx']
+  }
 });
 
 export default config;
