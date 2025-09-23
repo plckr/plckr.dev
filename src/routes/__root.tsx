@@ -57,7 +57,11 @@ function RootComponent() {
             </Avatar>
 
             <div>
-              <p className="text-medium inline-block font-medium">Ricardo Reis</p>
+              <p className="text-medium inline-block font-medium">
+                <Link to="/" className="-m-0.5 rounded-xs p-0.5">
+                  Ricardo Reis
+                </Link>
+              </p>
               <p className="opacity-60">full stack engineer</p>
             </div>
           </div>
