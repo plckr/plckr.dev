@@ -1,15 +1,15 @@
-import { getAllBlogPosts } from '@/lib/blog';
 import { Link, createFileRoute } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/react-start';
-
-const getAllPosts = createServerFn({ method: 'GET' }).handler(getAllBlogPosts);
+import { posts } from '~local-content';
 
 export const Route = createFileRoute('/blog/')({
   component: RouteComponent,
   staleTime: Infinity,
   loader: async () => {
-    const posts = await getAllPosts();
-    return { posts };
+    const p = [...posts].sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+
+    return { posts: p };
   }
 });
 
@@ -29,7 +29,7 @@ function RouteComponent() {
               <h3 className="font-semibold underline decoration-zinc-300 decoration-1 underline-offset-4">
                 {post.title}
               </h3>
-              <p className="mt-1 opacity-80 dark:opacity-70">{post.description}</p>
+              <p className="mt-1 opacity-80 dark:opacity-70">{post.excerpt}</p>
             </header>
 
             <footer className="mt-1 flex items-center space-x-2 text-sm opacity-70 dark:opacity-50">
@@ -41,7 +41,7 @@ function RouteComponent() {
                 })}
               </time>
               <span>·</span>
-              <span>{post.readTime} min read</span>
+              <span>{post.metadata.readingTime} min read</span>
             </footer>
           </Link>
         </article>
