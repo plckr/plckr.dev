@@ -8,7 +8,9 @@ The morning started like any other at the ContentCrafter base camp in Sichuan, C
 
 ## When Technology Meets Wildlife
 
-The first signs that something was amiss came when my usually reliable coffee machine started making strange beeping sounds. Instead of my regular americano, it displayed a cryptic message: "BAMBOO_BREW_PROTOCOL_INITIATED." Through the window of our base camp, I spotted a rather large panda sitting suspiciously close to our Wi-Fi router, tapping away at what appeared to be... wait, was that a smartphone?
+The first signs that something was amiss came when my usually reliable coffee machine started making strange beeping sounds. Instead of my regular americano, it displayed a cryptic message: `BAMBOO_BREW_PROTOCOL_INITIATED`. Through the window of our base camp, I spotted a rather large panda sitting suspiciously close to our Wi-Fi router, tapping away at what appeared to be... wait, was that a smartphone?
+
+![Tanstack Start](https://external-preview.redd.it/tanstack-start-v1-release-candidate-v0-WQkja1toMmIRfpDtZ_2p01kJneN-ii_HD7oeeBFSuu4.png?width=1080&crop=smart&auto=webp&s=1d4097f7752c3a57fbce70166041427b0de912f9)
 
 Our team watched in disbelief as this tech-savvy bear systematically reprogrammed every smart device in our camp. The coffee machine was just the beginning. Soon, our smart thermostats were maintaining a "perfect bamboo growing temperature," and our Bluetooth speakers were playing what could only be described as "Panda ASMR."
 
@@ -17,6 +19,21 @@ Our team watched in disbelief as this tech-savvy bear systematically reprogramme
 Back at ContentCrafter headquarters, our validation team was having an existential crisis. "How exactly does one verify a panda's coding credentials?" demanded Sarah from Validation Team Six, squinting at the footage. The security logs showed unauthorized access from an IP address that, impossibly, traced back to the middle of the panda reserve.
 
 "Well, the coffee machine is definitely making bamboo-flavored everything now," noted Mark, taking a reluctant sip from his bamboo-ccino. "I suppose that's validation enough?"
+
+```ts
+export const Route = createFileRoute('/blog/$slug')({
+  component: BlogPostComponent,
+  staleTime: 0, // [!code --]
+  staleTime: Infinity, // [!code ++]
+  loader: async ({ params }) => {
+    const post = posts.find((post) => post.slug === params.slug);
+    if (!post) throw notFound();
+
+    return { post };
+  },
+  notFoundComponent: NotFoundComponent
+});
+```
 
 The validation team spent three days trying to replicate the incident with other pandas, earning them some very judgmental looks from the local wildlife. Their official report included the memorable line: "Subject demonstrates unprecedented proficiency in Java (programming language, not coffee)."
 

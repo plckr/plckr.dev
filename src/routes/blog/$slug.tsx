@@ -1,3 +1,4 @@
+import { MDXContent } from '@/components/mdx-content';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { Link, NotFoundRouteProps, createFileRoute, notFound } from '@tanstack/react-router';
@@ -37,10 +38,9 @@ function BlogPostComponent() {
         </div>
       </header>
 
-      <div
-        className="prose dark:prose-invert mt-16"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      ></div>
+      <div className="prose dark:prose-invert mt-12">
+        <MDXContent code={post.mdx} />
+      </div>
     </article>
   );
 }

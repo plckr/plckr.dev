@@ -33,7 +33,7 @@ export default defineConfig({
 
         lastModified: timestamp(),
         metadata: s.metadata(),
-        content: s.markdown()
+        mdx: s.mdx()
       })
     }
   }
