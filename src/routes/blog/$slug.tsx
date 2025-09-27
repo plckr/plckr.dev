@@ -20,9 +20,9 @@ function BlogPostComponent() {
 
   return (
     <article>
-      <header className="mb-8">
-        <h1 className="text-2xl font-medium tracking-tighter">{post.title}</h1>
-        <p className="mt-1 max-w-[450px] opacity-70 dark:opacity-50">{post.excerpt}</p>
+      <header>
+        <h1 className="text-2xl font-bold">{post.title}</h1>
+        <p className="mt-1 opacity-70 dark:opacity-50">{post.excerpt}</p>
 
         <div className="mt-2 flex items-center space-x-2 text-sm opacity-60 dark:opacity-40">
           <time dateTime={post.date}>
@@ -37,7 +37,10 @@ function BlogPostComponent() {
         </div>
       </header>
 
-      <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+      <div
+        className="prose dark:prose-invert mt-16"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      ></div>
     </article>
   );
 }
