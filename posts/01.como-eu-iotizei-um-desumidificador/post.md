@@ -147,7 +147,7 @@ sensor:
 
 A funcionar:
 
-![](./images/ha-01.png)
+![](./images/ha-01.gif)
 
 ![](./images/ha-02.png)
 
