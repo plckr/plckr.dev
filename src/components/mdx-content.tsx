@@ -10,19 +10,28 @@ import {
 } from './ui/kibo-ui/code-block';
 import { ImageZoom } from './ui/kibo-ui/image-zoom';
 
-const sharedComponents = {
-  img: (props: { src: string; alt: string }) => {
+type MarkdownComponentsProps = {
+  img: { src: string; alt: string };
+  pre: { children: string };
+  code: { className: string; children: string };
+};
+type MarkdownComponents = keyof MarkdownComponentsProps;
+
+const markdownComponents: {
+  [K in MarkdownComponents]: (props: MarkdownComponentsProps[K]) => React.ReactNode;
+} = {
+  img: (props) => {
     return (
-      <ImageZoom className="not-prose my-8">
-        <img {...props} className="scale-105 rounded-lg" />
+      <ImageZoom className="not-prose my-8 px-2">
+        <img {...props} className="mx-auto rounded-lg" />
       </ImageZoom>
     );
   },
-  pre: ({ children }: { children: React.ReactNode }) => {
+  pre: ({ children }) => {
     return <pre className="not-prose">{children}</pre>;
   },
-  code: (props: { className: string; children: string }) => {
-    const code = props.children;
+  code: (props) => {
+    const code = props.children.replace(/\n$/, '');
 
     // For inline code style
     if (code.split('\n').length === 1) {
@@ -58,6 +67,10 @@ const sharedComponents = {
   }
 };
 
+const sharedComponents: Record<string, (props: any) => React.ReactNode> = {
+  // To add shared components
+};
+
 // parse the Velite generated MDX code into a React component function
 const useMDXComponent = (code: string) => {
   const fn = new Function(code);
@@ -72,5 +85,5 @@ interface MDXProps {
 // MDXContent component
 export const MDXContent = ({ code, components }: MDXProps) => {
   const Component = useMDXComponent(code);
-  return <Component components={{ ...sharedComponents, ...components }} />;
+  return <Component components={{ ...markdownComponents, ...sharedComponents, ...components }} />;
 };

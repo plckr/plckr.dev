@@ -23,9 +23,18 @@ export default defineConfig({
   collections: {
     posts: {
       name: 'Post',
-      pattern: '*.md',
+      pattern: '**.md',
       schema: s.object({
-        slug: s.path(),
+        slug: s.path().transform((value) => {
+          const [indexOrSlug, slug] = value.split('.');
+
+          if (slug) {
+            return slug.split('/')[0];
+          }
+
+          return indexOrSlug;
+        }),
+        toc: s.toc(),
 
         title: s.string(),
         excerpt: s.string(),

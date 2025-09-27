@@ -38,7 +38,7 @@ function BlogPostComponent() {
         </div>
       </header>
 
-      <div className="prose dark:prose-invert mt-12">
+      <div className="prose prose-sm dark:prose-invert mt-12">
         <MDXContent code={post.mdx} />
       </div>
     </article>
