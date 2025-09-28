@@ -46,16 +46,20 @@ export default function GithubActivity() {
       .then(setResult);
   }, []);
 
+  const commonProps = {
+    blockMargin: 3,
+    blockRadius: 2,
+    blockSize: 10,
+    fontSize: 14
+  };
+
   if (!result) {
     return (
       <div className="relative">
         <ContributionGraph
+          {...commonProps}
           data={dummyData}
           totalCount={0}
-          blockMargin={3}
-          blockRadius={2}
-          blockSize={10}
-          fontSize={14}
           labels={{ totalCount: ' ' }}
           className="animate-pulse"
         >
@@ -81,12 +85,9 @@ export default function GithubActivity() {
 
   return (
     <ContributionGraph
+      {...commonProps}
       data={result.contributions}
       totalCount={result.total}
-      blockMargin={3}
-      blockRadius={2}
-      blockSize={10}
-      fontSize={14}
       labels={{ totalCount: '{{count}} contributions in the last year' }}
     >
       <ContributionGraphCalendar>
