@@ -3,7 +3,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { FileRouteTypes } from '@/routeTree.gen';
-import { TanstackDevtools } from '@tanstack/react-devtools';
+import { TanStackDevtools } from '@tanstack/react-devtools';
 import {
   HeadContent,
   Link,
@@ -100,7 +100,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        <TanstackDevtools
+        <TanStackDevtools
           config={{
             position: 'bottom-left'
           }}

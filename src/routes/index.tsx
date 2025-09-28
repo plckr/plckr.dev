@@ -1,3 +1,4 @@
+import GithubActivity from '@/components/github-activity';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { createFileRoute } from '@tanstack/react-router';
@@ -28,26 +29,32 @@ function App() {
         </p>
       </section>
 
-      <footer className="mt-9 flex gap-4">
-        <Button variant="outline" asChild>
-          <a href="https://github.com/plckr/" target="_blank" rel="noopener noreferrer">
-            <Icon.Github />
-            Github
-            <Icon.ExternalLink className="ml-4" />
-          </a>
-        </Button>
+      <footer className="mt-9">
+        <section>
+          <GithubActivity />
+        </section>
 
-        <Button variant="outline" asChild>
-          <a
-            href="https://www.linkedin.com/in/ricardoreis2"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Icon.Linkedin />
-            Linkedin
-            <Icon.ExternalLink className="ml-4" />
-          </a>
-        </Button>
+        <section className="mt-6 flex gap-4">
+          <Button variant="outline" asChild>
+            <a href="https://github.com/plckr/" target="_blank" rel="noopener noreferrer">
+              <Icon.Github />
+              Github
+              <Icon.ExternalLink className="ml-4" />
+            </a>
+          </Button>
+
+          <Button variant="outline" asChild>
+            <a
+              href="https://www.linkedin.com/in/ricardoreis2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon.Linkedin />
+              Linkedin
+              <Icon.ExternalLink className="ml-4" />
+            </a>
+          </Button>
+        </section>
       </footer>
     </>
   );
