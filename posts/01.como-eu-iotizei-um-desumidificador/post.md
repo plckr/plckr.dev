@@ -185,23 +185,9 @@ sensor:
 
 # Migration to ESPHome
 
-After using Tasmota for about a year, I decided to migrate to ESPHome for better Home Assistant integration and more advanced features. ESPHome provides native Home Assistant integration, better debugging capabilities, and more flexible configuration options.
+After using Tasmota for about a year, I decided to migrate to ESPHome. ESPHome is a system to control ESP8266/ESP32 microcontrollers through simple YAML configuration files, and it has better compatibility with Home Assistant compared to Tasmota. Since I already had other devices running ESPHome in my setup, it made sense to standardize everything on the same platform.
 
-## Why ESPHome?
-
-- **Native Home Assistant integration**: No need for MQTT configuration
-- **Better debugging**: Real-time logs and device status
-- **More flexible**: Easier to add sensors and customize behavior
-- **Simpler updates**: OTA updates directly from Home Assistant
-
-## Migration Process
-
-The migration was surprisingly straightforward. Since I was already using Tasmota, I could simply compile the ESPHome binary and upload it via the Tasmota web interface:
-
-1. Create ESPHome configuration
-2. Compile the binary
-3. Upload via Tasmota's "Upgrade" feature
-4. Update Home Assistant configuration
+The migration was very straightforward. Since it was already using Tasmota, it was only needed to compile the ESPHome binary and upload it via the Tasmota web interface.
 
 ## ESPHome Configuration
 
@@ -300,4 +286,4 @@ When the device is offline:
 
 # Conclusion
 
-This project demonstrates how you can transform any basic appliance into a smart home device with some creativity and basic electronics knowledge. The key was understanding the device's internal circuitry and finding the right points to interface with it.
+This project demonstrates how you can transform a basic appliance into a smart home device with basic electronics knowledge. The key is to understand the device's internal circuitry and finding the right points to interface with it.
