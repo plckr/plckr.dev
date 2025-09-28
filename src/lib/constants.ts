@@ -16,3 +16,7 @@ export const browser = typeof window !== 'undefined';
 export const dev = import.meta.env.DEV;
 
 export const GITHUB_USERNAME = 'plckr';
+export const GITHUB_PROFILE_URL = `https://github.com/${GITHUB_USERNAME}`;
+
+export const LINKEDIN_USERNAME = 'ricardoreis2';
+export const LINKEDIN_PROFILE_URL = `https://www.linkedin.com/in/${LINKEDIN_USERNAME}`;
