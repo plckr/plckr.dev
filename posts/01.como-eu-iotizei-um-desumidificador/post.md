@@ -1,79 +1,111 @@
 ---
-title: Como eu 'iotizei' um desumidificador
-excerpt: TBD
+title: How I Turned a Basic Dehumidifier into a Smart Home Device
+excerpt: A step-by-step guide to IoT-izing a dehumidifier using ESP8266, optocouplers, and Home Assistant integration
 date: 2018-12-03
 ---
 
-# Material necessário
+![White dehumidifier with a MCU, components and wires visible](./images/banner.jpg)
 
-- [Desumidificador 3](https://www.worten.pt/grandes-eletrodomesticos/climatizacao-e-aquecimento/desumidificadores/desumidificador-becken-10l-bdh2774-5863842) _(ou outro aparelho)_
-- Wemos D1 mini _(flashado com [Tasmota](https://tasmota.github.io/docs/))_
-- Fios
-- Multimetro
-- Resistors
-- Optoacopladores 4N25
-- Material e equipamento para soldar
+# Introduction
 
-# Achar a solução
+I set out to transform my basic dehumidifier into a smart home device that I could control from my phone and integrate with Home Assistant. This project demonstrates how to turn any simple appliance into a smart device using an ESP8266, optocouplers, and some creative reverse engineering.
 
-## Usar optos para ler os LEDs e simular toque do botão da placa de controlo
+The main components I used were a basic dehumidifier (in my case a [Becken](https://www.worten.pt/grandes-eletrodomesticos/climatizacao-e-aquecimento/desumidificadores/desumidificador-becken-10l-bdh2774-5863842)), a Wemos D1 mini, and some basic electronics components including 4N25 optocouplers, resistors, and electrical wires.
 
-A minha ideia inicial era ler os leds e controlar os botões do painel de controlo. Seriam 6 leds e 2 botões. Utilizando o optoacoplador 4N25, um para cada controlo achava eu que chegava ao que pretendia sem grande dificuldade. A coisa começou a complicar-se quando tentava ligar o opto em paralelo ao LED, o 4N25 precisa de voltagem e acabava por não funcionar nem o led nem o opto.
+# The Challenge
 
-O botão não tinha dificuldade porque a voltagem era fornecida pelo Wemos e não pelo botão, então ele não perdia voltagem nenhuma.
+The main challenge was finding a way to interface with the dehumidifier's control board without damaging the original functionality. I needed to:
+
+- Control the power button remotely
+- Able to read if dehumidifier is turned on or off
+- Read the water tank status (if it's full)
+- Integrate everything with a smart system [Home Assistant](https://www.home-assistant.io/)
+
+# Solution Evolution
+
+## Attempt 1: Using Optocouplers for LED Reading and Button Simulation
+
+My initial approach was to read the status LEDs and control the panel buttons directly. I planned to use 6 LEDs and 2 buttons with 4N25 optocouplers for each control point.
+
+However, this approach failed when I tried to connect the optocoupler in parallel with the LED. The 4N25 requires voltage to function, and this setup prevented both the LED and optocoupler from working properly.
+
+The button control worked better since the voltage was supplied by the Wemos rather than the button itself, so there was no voltage loss.
 
 ![Control board](./images/control-board-1.png)
 
-## Usar LDRs para saber o estado dos LEDs
+## Attempt 2: Using LDRs to Monitor LED States
 
-Depois do desespero tentei implementar um LDR a cada led e saber se está ligado ou não. Como não tenho experiência com LDRs não consegui meter a funcionar, não sei se tinha haver com os pinos do wemos serem digitais e não analógicos.
+After the initial failure, I tried implementing LDRs (Light Dependent Resistors) to detect when each LED was on or off. I used a multimeter to test the LDR connections and verify they were working properly. However, I ran into issues with this approach - likely because the Wemos pins are digital rather than analog, and I lacked experience with LDRs.
 
 ![Control board](./images/control-board-2.png)
 
 ![LDR connected to led](./images/ldr-connected.png)
 
-## Ler o estado diretamente aos componentes
+## Final Solution: Direct Component State Reading
 
-Depois do fracasso dos LDRs, decidi ir diretamente aos componentes e saber o estado deles. Analisando a placa principal na parte de baixo, encontrei a fonte, os 5V para o Wemos, o Switch para o tanque e o relay que controla motor. Ou seja, deste modo, consigo simular o botão a ser pressionado, saber o estado do desumidificador, se ligou ou não e saber o estado do tanque.
+After the LDR failure, I decided to go directly to the main components and read their states. Using a multimeter to trace the circuit paths, I analyzed the main PCB from the bottom and found:
 
-O switch tem três pinos na parte de baixo da placa mas só os das pontas é que estão ligados ao switch, ele opera com 5VDC enquanto que o relay opera com 12VDC.
-
-![Electrical diagram](./images/electrical-diagram.png)
+- Power supply
+- 5V source for the Wemos
+- Water tank switch
+- Relay controlling the motor
 
 ![PCB Description Top](./images/analyzing-pcb-top.png)
 
 ![PCB Description Bottom](./images/analyzing-pcb-bottom.png)
 
-Fiz as ligações. No switch ligo 1 fio que posteriormente dá retorno ao GND da fonte. Quanto ao relay, reparei que se o equipamento estivesse desligado não passava tensão nenhuma, então liguei os dois fios lá. Assim, quando o equipamento ligar o opto vai ligar também.
+This approach allowed me to:
+
+- Simulate button presses
+- Know the dehumidifier's power state
+- Monitor the water tank status
+
+The switch has three pins on the bottom of the board, but only the outer pins are connected to the actual switch. It operates at 5VDC while the relay operates at 12VDC.
+
+![Electrical diagram](./images/electrical-diagram.png)
+
+## Making the Connections
+
+I connected one wire to the switch that later returns to the power supply's GND. For the relay, I noticed that when the device was off, no voltage passed through, so I connected both wires there. This way, when the device turns on, the optocoupler activates as well.
 
 ![PCB with relay wires](./images/pcb-with-relay-wires.png)
 
-Depois dos testes estarem OK, passei a cablagem para uma placa. Usei os resistors para diminuir a tensão para que não queime os optos. Não esquecer de aplicar a lei de Ohm para saber que resistor aplicar.
+After successful testing, I moved the wiring to a custom PCB using soldering equipment. I used resistors to reduce the voltage to prevent burning out the optocouplers. Remember to apply Ohm's law to calculate the correct resistor values.
 
-![Esp diagram](./images/esp-diagram.png)
+![ESP diagram](./images/esp-diagram.png)
 
 ![Custom PCB](./images/custom-pcb.png)
 
-O botão ligado ao opto:
+The button connected to the optocoupler:
 
 ![Physical button with optocoupler](./images/physical-button-with-opto.png)
 
-# Wemos com Tasmota
+# ESP8266 Setup with Tasmota
 
-Utilizei [tasmota](https://tasmota.github.io/docs/), assim não tenho que perder tempo a programar.
+> **Note**: After using this Tasmota setup for about a year, I migrated to ESPHome for better Home Assistant integration. The next section covers this migration process.
 
-Para flashar o wemos ver este [link 6](https://github.com/arendst/Sonoff-Tasmota/wiki/Wemos-D1-Mini)
+I used [Tasmota](https://tasmota.github.io/docs/) firmware to avoid spending time on custom programming. This open-source firmware provides MQTT connectivity and web interface out of the box.
 
-Configurar o módulo para generic e fazer as alterações dos pinos:
+## Flashing the Wemos D1 Mini
 
-O Relay1 é o Botão, Switch2 é o Tanque e o Switch3 é o estado (se está ligado ou desligado).
+To flash the Wemos, follow this [guide](https://github.com/arendst/Sonoff-Tasmota/wiki/Wemos-D1-Mini).
+
+## Configuration
+
+Configure the module as "Generic" and set up the pins as follows:
+
+- **Relay1**: Power button control
+- **Switch2**: Water tank status
+- **Switch3**: Device power state (on/off)
 
 ![Tasmota device config](./images/tasmota-device-config.png)
 
-na consola alterar o pulsetime e o switchmode
+## Console Configuration
+
+In the Tasmota console, configure the following settings:
 
 ```
-# Isto faz com que o relay1 passe a OFF imediatamente após ter estado em ON. Aliás, este relay é apenas o clique do botão, não queremos o botão sempre pressionado.
+# This makes Relay1 turn OFF immediately after being ON. This relay is just for button clicking, not keeping the button pressed.
 pulsetime1 1
 
 switchmode1 0
@@ -82,18 +114,24 @@ switchmode2 2
 switchmode3 2
 ```
 
-alterar as configurações de mqtt a vosso gosto:
+## MQTT Configuration
+
+Configure the MQTT settings according to your setup:
 
 ![Tasmota MQTT config](./images/tasmota-mqtt-config.png)
 
-# Home Assistant
+## Home Assistant Integration with Tasmota
+
+Now comes the fun part - integrating everything into Home Assistant! This configuration creates switches and sensors that allow you to control and monitor your dehumidifier from the Home Assistant interface.
+
+Add this configuration to your `configuration.yaml` file:
 
 ```yaml
 homeassistant:
   customize:
     switch.dehumidifier_power_button:
-      friendly_name: 'Ligar/Desligar'
-      icon: 'mdi:page-layout-footer'
+      friendly_name: 'Power On/Off'
+      icon: 'mdi:power'
 
 switch:
   - platform: mqtt
@@ -126,14 +164,14 @@ sensor:
   - platform: template
     sensors:
       dehumidifier_water_box_status:
-        friendly_name: 'Estado do Tanque'
+        friendly_name: 'Water Tank Status'
         value_template: >
           {% if is_state('switch.dehumidifier_water_box_switch', 'on') %}
-            Cheio
+            Full
           {% elif is_state('switch.dehumidifier_water_box_switch', 'off') %}
             OK
           {% else %}
-            Indisponível
+            Unavailable
           {% endif %}
         icon_template: >
           {% if is_state('switch.dehumidifier_water_box_switch', 'on') %}
@@ -145,7 +183,110 @@ sensor:
           {% endif %}
 ```
 
-A funcionar:
+# Migration to ESPHome
+
+After using Tasmota for about a year, I decided to migrate to ESPHome for better Home Assistant integration and more advanced features. ESPHome provides native Home Assistant integration, better debugging capabilities, and more flexible configuration options.
+
+## Why ESPHome?
+
+- **Native Home Assistant integration**: No need for MQTT configuration
+- **Better debugging**: Real-time logs and device status
+- **More flexible**: Easier to add sensors and customize behavior
+- **Simpler updates**: OTA updates directly from Home Assistant
+
+## Migration Process
+
+The migration was surprisingly straightforward. Since I was already using Tasmota, I could simply compile the ESPHome binary and upload it via the Tasmota web interface:
+
+1. Create ESPHome configuration
+2. Compile the binary
+3. Upload via Tasmota's "Upgrade" feature
+4. Update Home Assistant configuration
+
+## ESPHome Configuration
+
+Here's the ESPHome configuration I used:
+
+```yaml
+esphome:
+  name: desumidificador
+  friendly_name: Desumidificador
+
+esp8266:
+  board: d1_mini
+
+# To keep code simple, I ommited code that's specific to each one
+
+switch:
+  - platform: template
+    id: power
+    name: 'dehumidifier_power'
+    icon: 'mdi:page-layout-footer'
+    lambda: |-
+      if (id(running).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - switch.turn_on: power_gpio
+    turn_off_action:
+      - switch.turn_on: power_gpio
+
+  - platform: gpio
+    id: power_gpio
+    pin:
+      number: D1
+      mode: INPUT_PULLUP
+      inverted: true
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - delay: 1s
+      - switch.turn_off: power_gpio
+
+binary_sensor:
+  - platform: gpio
+    name: 'dehumidifier_tank_full'
+    id: tank_full
+    pin:
+      number: D2
+      mode: INPUT_PULLUP
+      inverted: true
+  - platform: gpio
+    name: 'dehumidifier_tank_inserted'
+    id: tank_inserted
+    pin:
+      number: D5
+      mode: INPUT_PULLUP
+      inverted: True
+  - platform: gpio
+    name: 'dehumidifier_running'
+    id: running
+    pin:
+      number: D3
+      mode: INPUT_PULLUP
+      inverted: True
+
+text_sensor:
+  - platform: template
+    name: 'dehumidifier_tank_state'
+    icon: 'mdi:cup-water'
+    update_interval: 5s
+    lambda: |-
+      if (id(tank_full).state && id(tank_inserted).state) {
+        return {"Cheio"};
+      } else if (id(tank_full).state && !id(tank_inserted).state) {
+        return {"Sem Tanque"};
+      } else if (!id(tank_full).state && id(tank_inserted).state) {
+        return {"OK"};
+      } else {
+        return {"unavailable"};
+      }
+```
+
+## Results
+
+Here's the final result in action:
 
 ![](./images/ha-01.gif)
 
@@ -153,6 +294,10 @@ A funcionar:
 
 ![](./images/ha-03.png)
 
-Se estiver desligado:
+When the device is offline:
 
 ![](./images/ha-unavailable.png)
+
+# Conclusion
+
+This project demonstrates how you can transform any basic appliance into a smart home device with some creativity and basic electronics knowledge. The key was understanding the device's internal circuitry and finding the right points to interface with it.
