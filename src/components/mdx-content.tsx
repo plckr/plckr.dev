@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import * as runtime from 'react/jsx-runtime';
 
 import {
@@ -11,6 +12,7 @@ import {
 import { ImageZoom } from './ui/kibo-ui/image-zoom';
 
 type MarkdownComponentsProps = {
+  a: { href: string; children: string };
   img: { src: string; alt: string };
   pre: { children: string };
   code: { className: string; children: string };
@@ -20,6 +22,17 @@ type MarkdownComponents = keyof MarkdownComponentsProps;
 const markdownComponents: {
   [K in MarkdownComponents]: (props: MarkdownComponentsProps[K]) => React.ReactNode;
 } = {
+  a: ({ children, href }) => {
+    if (href.startsWith('/')) {
+      return <Link to={href}>{children}</Link>;
+    }
+
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    );
+  },
   img: (props) => {
     return (
       <ImageZoom className="not-prose my-8 px-2">
