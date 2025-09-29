@@ -2,10 +2,20 @@ import GithubActivity from '@/components/github-activity';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { GITHUB_PROFILE_URL, LINKEDIN_PROFILE_URL } from '@/lib/constants';
+import { createHomepageSEO, createSEOHead } from '@/lib/seo';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
-  component: App
+  component: App,
+  head: () => {
+    const seoConfig = createHomepageSEO();
+    const { meta, links } = createSEOHead(seoConfig);
+
+    return {
+      meta,
+      links
+    };
+  }
 });
 
 function App() {

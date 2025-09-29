@@ -3,6 +3,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { GITHUB_PROFILE_IMAGE, WORK_POSITION } from '@/lib/constants';
+import { createHomepageSEO, createSEOHead } from '@/lib/seo';
 import { FileRouteTypes } from '@/routeTree.gen';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
@@ -21,14 +22,15 @@ import { ComponentProps } from 'react';
 import appCss from '../styles.css?url';
 
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Ricardo Reis' }
-    ],
-    links: [{ rel: 'stylesheet', href: appCss }]
-  }),
+  head: () => {
+    const seoConfig = createHomepageSEO();
+    const { meta, links } = createSEOHead(seoConfig);
+
+    return {
+      meta: [...meta, { rel: 'stylesheet', href: appCss }],
+      links: [...links, { rel: 'stylesheet', href: appCss }]
+    };
+  },
   shellComponent: RootDocument,
   component: RootComponent
 });

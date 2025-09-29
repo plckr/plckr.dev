@@ -1,6 +1,7 @@
 import { MDXContent } from '@/components/mdx-content';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
+import { createBlogPostSEO, createSEOHead } from '@/lib/seo';
 import { Link, NotFoundRouteProps, createFileRoute, notFound } from '@tanstack/react-router';
 import { posts } from '~local-content';
 
@@ -17,9 +18,10 @@ export const Route = createFileRoute('/blog/$slug')({
     if (!loaderData) return {};
     const { post } = loaderData;
 
-    return {
-      meta: [{ title: `${post.title} | Ricardo Reis` }]
-    };
+    const seoConfig = createBlogPostSEO(post);
+    const { meta, links } = createSEOHead(seoConfig);
+
+    return { meta, links };
   },
   notFoundComponent: NotFoundComponent
 });

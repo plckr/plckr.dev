@@ -1,3 +1,4 @@
+import { createBlogListSEO, createSEOHead } from '@/lib/seo';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { posts } from '~local-content';
 
@@ -10,6 +11,12 @@ export const Route = createFileRoute('/blog/')({
     });
 
     return { posts: p };
+  },
+  head: () => {
+    const seoConfig = createBlogListSEO();
+    const { meta, links } = createSEOHead(seoConfig);
+
+    return { meta, links };
   }
 });
 
