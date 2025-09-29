@@ -13,6 +13,14 @@ export const Route = createFileRoute('/blog/$slug')({
 
     return { post };
   },
+  head: ({ loaderData }) => {
+    if (!loaderData) return {};
+    const { post } = loaderData;
+
+    return {
+      meta: [{ title: `${post.title} | Ricardo Reis` }]
+    };
+  },
   notFoundComponent: NotFoundComponent
 });
 

@@ -2,6 +2,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { GITHUB_PROFILE_IMAGE, WORK_POSITION } from '@/lib/constants';
 import { FileRouteTypes } from '@/routeTree.gen';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
@@ -24,7 +25,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'TanStack Start Starter' }
+      { title: 'Ricardo Reis' }
     ],
     links: [{ rel: 'stylesheet', href: appCss }]
   }),
@@ -60,7 +61,7 @@ function RootComponent() {
             <div className="flex items-center gap-4 pl-4 sm:pl-0">
               <Avatar asChild className="size-10">
                 <Link to="/">
-                  <AvatarImage src="https://avatars.githubusercontent.com/u/11768109" />
+                  <AvatarImage src={GITHUB_PROFILE_IMAGE} />
                   <AvatarFallback>RR</AvatarFallback>
                 </Link>
               </Avatar>
@@ -71,7 +72,7 @@ function RootComponent() {
                     Ricardo Reis
                   </Link>
                 </p>
-                <p className="opacity-60">full stack engineer</p>
+                <p className="opacity-60">{WORK_POSITION}</p>
               </div>
             </div>
 
