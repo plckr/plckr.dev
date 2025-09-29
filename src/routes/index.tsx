@@ -11,22 +11,14 @@ export const Route = createFileRoute('/')({
 function App() {
   return (
     <>
-      <section className="text-base/relaxed text-zinc-800 dark:text-zinc-200">
-        <p className="text-zinc-800 dark:text-zinc-200">Hi, I'm Ricardo.</p>
+      <section className="text-base/relaxed">
+        <p>Hi, I'm Ricardo.</p>
 
         <p className="mt-5">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent hendrerit pretium enim
-          nec pharetra. Donec nec nibh sed urna vehicula fringilla eu eu nunc. Pellentesque tempus,
-          lectus a eleifend varius, justo leo tempus nunc, vestibulum rhoncus mi ligula vitae mi.
-          Pellentesque diam mi, feugiat vitae consequat ut, efficitur non eros.
-        </p>
-
-        <hr className="my-8" />
-
-        <p className="my-5 text-zinc-800 dark:text-zinc-200">
-          Proin condimentum, est nec sagittis fermentum, ex magna lacinia turpis, vitae aliquam
-          tortor odio lobortis dui. Maecenas enim mi, laoreet placerat elementum pulvinar, congue
-          vel sapien. Sed aliquet odio sit amet risus cursus, et commodo nisl consequat.
+          I'm pretty much into tech and always on the lookout for new stuff to learn. My background
+          focus mostly on front-end but I'm also into back-end, I'm also keen on picking up new
+          skills and applying them the right way. Excited to join a team that loves innovation and
+          is always aiming to improve.
         </p>
       </section>
 
