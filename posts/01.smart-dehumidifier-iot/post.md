@@ -2,9 +2,8 @@
 title: How I Turned a Basic Dehumidifier into a Smart Home Device
 excerpt: My journey to IoT-ize a dehumidifier using ESP8266, optocouplers, and Home Assistant integration
 date: 2018-12-03
+thumbnail: ./images/thumbnail.jpg
 ---
-
-![White dehumidifier with a MCU, components and wires visible](./images/banner.jpg)
 
 # Introduction
 

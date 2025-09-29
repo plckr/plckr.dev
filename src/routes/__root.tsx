@@ -55,7 +55,7 @@ function RootComponent() {
       }}
     >
       <ThemeProvider defaultTheme="dark" storageKey="plckr.dev-theme">
-        <main className="mx-4 mt-2 mb-40 px-4 sm:mt-8 sm:max-w-screen-lg sm:px-6 md:mx-auto md:max-w-2xl md:px-8">
+        <main className="mx-4 mt-2 mb-40 px-2 sm:mt-8 sm:max-w-screen-lg sm:px-6 md:mx-auto md:max-w-2xl md:px-8">
           <header className="flex flex-col items-start justify-start pt-8 pb-12">
             <div className="flex items-center gap-4 pl-4 sm:pl-0">
               <Avatar asChild className="size-10">

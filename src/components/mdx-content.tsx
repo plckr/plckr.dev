@@ -35,7 +35,7 @@ const markdownComponents: {
   },
   img: (props) => {
     return (
-      <ImageZoom className="not-prose my-8 px-2">
+      <ImageZoom className="not-prose my-8 sm:px-2">
         <img {...props} className="mx-auto rounded-lg" />
       </ImageZoom>
     );

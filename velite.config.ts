@@ -39,6 +39,7 @@ export default defineConfig({
         title: s.string(),
         excerpt: s.string(),
         date: s.isodate(),
+        thumbnail: s.image(),
 
         lastModified: timestamp(),
         metadata: s.metadata(),
