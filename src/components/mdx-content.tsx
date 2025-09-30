@@ -41,7 +41,7 @@ const markdownComponents: {
     );
   },
   pre: ({ children }) => {
-    return <pre className="not-prose">{children}</pre>;
+    return <pre>{children}</pre>;
   },
   code: (props) => {
     const code = props.children.replace(/\n$/, '');
