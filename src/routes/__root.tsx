@@ -16,7 +16,7 @@ import { ThemeProvider } from '~/components/theme-provider';
 import { ThemeToggle } from '~/components/theme-toggle';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Button } from '~/components/ui/button';
-import { GITHUB_PROFILE_IMAGE, WORK_POSITION } from '~/lib/constants';
+import { GITHUB_PROFILE_IMAGE, WORK_POSITION, dev } from '~/lib/constants';
 import { createHomepageSEO, createSEOHead } from '~/lib/seo';
 import { FileRouteTypes } from '~/routeTree.gen';
 
@@ -114,23 +114,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        <TanStackDevtools
-          config={{
-            position: 'bottom-left'
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />
-            },
-            {
-              name: 'Tanstack Query',
-              render: <ReactQueryDevtoolsPanel />
-            }
-          ]}
-        />
+        <Devtools />
         <Scripts />
       </body>
     </html>
   );
 }
+
+const Devtools = dev ? (await import('../components/devtools-setup')).default : () => null;
