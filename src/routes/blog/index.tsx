@@ -1,6 +1,7 @@
-import { createBlogListSEO, createSEOHead } from '@/lib/seo';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { posts } from '~local-content';
+
+import { createBlogListSEO, createSEOHead } from '~/lib/seo';
 
 export const Route = createFileRoute('/blog/')({
   component: RouteComponent,

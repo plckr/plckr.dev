@@ -1,5 +1,9 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+import { eachDayOfInterval, formatISO } from 'date-fns';
+import { Loader2Icon, TriangleAlertIcon } from 'lucide-react';
+
 import {
   ContributionGraph,
   ContributionGraphBlock,
@@ -7,11 +11,8 @@ import {
   ContributionGraphFooter,
   ContributionGraphLegend,
   ContributionGraphTotalCount
-} from '@/components/ui/kibo-ui/contribution-graph';
-import { cn } from '@/lib/utils';
-import { useQuery } from '@tanstack/react-query';
-import { eachDayOfInterval, formatISO } from 'date-fns';
-import { Loader2Icon, TriangleAlertIcon } from 'lucide-react';
+} from '~/components/ui/kibo-ui/contribution-graph';
+import { cn } from '~/lib/utils';
 
 import { Button } from './ui/button';
 

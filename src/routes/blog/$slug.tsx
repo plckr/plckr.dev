@@ -1,9 +1,10 @@
-import { MDXContent } from '@/components/mdx-content';
-import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
-import { createBlogPostSEO, createSEOHead } from '@/lib/seo';
 import { Link, NotFoundRouteProps, createFileRoute, notFound } from '@tanstack/react-router';
 import { posts } from '~local-content';
+
+import { MDXContent } from '~/components/mdx-content';
+import { Button } from '~/components/ui/button';
+import { Icon } from '~/components/ui/icon';
+import { createBlogPostSEO, createSEOHead } from '~/lib/seo';
 
 export const Route = createFileRoute('/blog/$slug')({
   component: BlogPostComponent,

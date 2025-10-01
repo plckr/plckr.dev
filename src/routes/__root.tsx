@@ -1,10 +1,3 @@
-import { ThemeProvider } from '@/components/theme-provider';
-import { ThemeToggle } from '@/components/theme-toggle';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { GITHUB_PROFILE_IMAGE, WORK_POSITION } from '@/lib/constants';
-import { createHomepageSEO, createSEOHead } from '@/lib/seo';
-import { FileRouteTypes } from '@/routeTree.gen';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import {
@@ -18,6 +11,14 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { PostHogProvider } from 'posthog-js/react';
 import { ComponentProps } from 'react';
+
+import { ThemeProvider } from '~/components/theme-provider';
+import { ThemeToggle } from '~/components/theme-toggle';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Button } from '~/components/ui/button';
+import { GITHUB_PROFILE_IMAGE, WORK_POSITION } from '~/lib/constants';
+import { createHomepageSEO, createSEOHead } from '~/lib/seo';
+import { FileRouteTypes } from '~/routeTree.gen';
 
 import appCss from '../styles.css?url';
 

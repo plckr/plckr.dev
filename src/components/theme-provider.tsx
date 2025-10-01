@@ -1,5 +1,6 @@
-import { browser } from '@/lib/constants';
 import { createContext, useContext, useEffect, useState } from 'react';
+
+import { browser } from '~/lib/constants';
 
 type Theme = 'dark' | 'light' | 'system';
 

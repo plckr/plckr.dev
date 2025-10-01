@@ -1,7 +1,8 @@
-import { GITHUB_USERNAME } from '@/lib/constants';
-import { sum } from '@/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 import { json } from '@tanstack/react-start';
+
+import { GITHUB_USERNAME } from '~/lib/constants';
+import { sum } from '~/lib/utils';
 
 export type GithubContributionsResponse = {
   contributions: {
