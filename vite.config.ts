@@ -13,7 +13,12 @@ const config = defineConfig({
     }),
     cloudflare({ viteEnvironment: { name: 'ssr' } }),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({
+      router: {
+        quoteStyle: 'single',
+        semicolons: true
+      }
+    }),
     viteReact()
   ],
   optimizeDeps: {
