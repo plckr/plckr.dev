@@ -27,7 +27,7 @@
     "@radix-ui/react-use-controllable-state": "^1.2.2",
     "@shikijs/transformers": "^3.13.0",
     "@tailwindcss/vite": "^4.1.13",
-    "@tanstack/react-devtools": "^0.7.0",
+    "@tanstack/react-devtools": "^0.7.1",
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-router": "^1.132.19",
     "@tanstack/react-router-devtools": "^1.132.19",
