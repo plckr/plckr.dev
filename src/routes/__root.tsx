@@ -1,5 +1,3 @@
-import { TanStackDevtools } from '@tanstack/react-devtools';
-import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import {
   HeadContent,
   Link,
@@ -8,7 +6,6 @@ import {
   createRootRoute,
   useMatchRoute
 } from '@tanstack/react-router';
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { PostHogProvider } from 'posthog-js/react';
 import { ComponentProps } from 'react';
 
