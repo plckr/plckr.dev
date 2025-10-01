@@ -54,6 +54,7 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.13.8",
     "@tailwindcss/typography": "^0.5.19",
+    "@tanstack/devtools-vite": "^0.3.3",
     "@tanstack/eslint-config": "^0.3.2",
     "@tanstack/react-query-devtools": "^5.90.2",
     "@testing-library/dom": "^10.4.0",
