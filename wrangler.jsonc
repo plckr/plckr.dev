@@ -4,5 +4,11 @@
   "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
-  "vars": {}
+  "vars": {},
+  "routes": [
+    {
+      "pattern": "plckr.dev",
+      "custom_domain": true
+    }
+  ]
 }
