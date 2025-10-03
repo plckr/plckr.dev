@@ -21,7 +21,15 @@ const config = defineConfig({
       router: {
         quoteStyle: 'single',
         semicolons: true
-      }
+      },
+      pages: [
+        {
+          path: '/rss.xml',
+          prerender: {
+            enabled: true
+          }
+        }
+      ]
     }),
     viteReact()
   ],

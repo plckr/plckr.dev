@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
-    "start": "node .output/server/index.mjs",
+    "start": "node dist/server/index.js",
     "prebuild": "pnpm run validate",
     "build": "vite build",
     "deploy": "wrangler deploy",
@@ -40,6 +40,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "feed": "^5.1.0",
     "lucide-react": "^0.476.0",
     "posthog-js": "^1.268.8",
     "prettier-plugin-tailwindcss": "^0.6.14",
