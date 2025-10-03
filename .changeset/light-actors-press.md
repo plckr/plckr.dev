@@ -1,5 +1,0 @@
----
-'plckr.dev': major
----
-
-Release
