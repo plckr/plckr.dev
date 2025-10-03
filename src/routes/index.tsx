@@ -28,8 +28,7 @@ function App() {
         <p className="mt-5">
           I'm pretty much into tech and always on the lookout for new stuff to learn. My background
           focus mostly on front-end but I'm also into back-end, I'm also keen on picking up new
-          skills and applying them the right way. Excited to join a team that loves innovation and
-          is always aiming to improve.
+          skills and applying them the right way.
         </p>
       </section>
 
