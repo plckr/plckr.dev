@@ -1,9 +1,8 @@
-import { Link, NotFoundRouteProps, createFileRoute, notFound } from '@tanstack/react-router';
+import { createFileRoute, notFound } from '@tanstack/react-router';
 import { posts } from '~local-content';
 
+import ErrorSection from '~/components/error-section';
 import { MDXContent } from '~/components/mdx-content';
-import { Button } from '~/components/ui/button';
-import { Icon } from '~/components/ui/icon';
 import { createBlogPostSEO, createSEOHead } from '~/lib/seo';
 
 export const Route = createFileRoute('/blog/$slug')({
@@ -24,7 +23,16 @@ export const Route = createFileRoute('/blog/$slug')({
 
     return { meta, links };
   },
-  notFoundComponent: NotFoundComponent
+  notFoundComponent: () => (
+    <ErrorSection
+      statusCode={404}
+      description="Article not found."
+      backButton={{
+        to: '/blog',
+        title: 'back to blog'
+      }}
+    />
+  )
 });
 
 function BlogPostComponent() {
@@ -63,19 +71,5 @@ function BlogPostComponent() {
         <MDXContent code={post.mdx} />
       </div>
     </article>
-  );
-}
-
-function NotFoundComponent(_props: NotFoundRouteProps) {
-  return (
-    <section>
-      <h1 className="text-foreground/50 tracking-wide">404</h1>
-      <p className="text-2xl font-medium">Article not found.</p>
-      <Button variant="default" asChild className="mt-6">
-        <Link to="/blog">
-          <Icon.ArrowLeft /> back to blog
-        </Link>
-      </Button>
-    </section>
   );
 }

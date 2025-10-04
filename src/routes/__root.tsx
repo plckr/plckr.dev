@@ -9,6 +9,7 @@ import {
 import { PostHogProvider } from 'posthog-js/react';
 import { ComponentProps } from 'react';
 
+import ErrorSection from '~/components/error-section';
 import { ThemeProvider } from '~/components/theme-provider';
 import { ThemeToggle } from '~/components/theme-toggle';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
@@ -30,7 +31,17 @@ export const Route = createRootRoute({
     };
   },
   shellComponent: RootDocument,
-  component: RootComponent
+  component: RootComponent,
+  notFoundComponent: () => (
+    <ErrorSection
+      statusCode={404}
+      description="Page not found."
+      backButton={{
+        to: '/',
+        title: 'back to home'
+      }}
+    />
+  )
 });
 
 function RootComponent() {
