@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml';
+import { Route as FeedDotjsonRouteImport } from './routes/feed[.]json';
+import { Route as AtomDotxmlRouteImport } from './routes/atom[.]xml';
 import { Route as IndexRouteImport } from './routes/index';
 import { Route as BlogIndexRouteImport } from './routes/blog/index';
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug';
@@ -18,6 +20,16 @@ import { Route as ApiGithubContributionsRouteImport } from './routes/api/github-
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
   id: '/rss.xml',
   path: '/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const FeedDotjsonRoute = FeedDotjsonRouteImport.update({
+  id: '/feed.json',
+  path: '/feed.json',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const AtomDotxmlRoute = AtomDotxmlRouteImport.update({
+  id: '/atom.xml',
+  path: '/atom.xml',
   getParentRoute: () => rootRouteImport,
 } as any);
 const IndexRoute = IndexRouteImport.update({
@@ -43,6 +55,8 @@ const ApiGithubContributionsRoute = ApiGithubContributionsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
+  '/atom.xml': typeof AtomDotxmlRoute;
+  '/feed.json': typeof FeedDotjsonRoute;
   '/rss.xml': typeof RssDotxmlRoute;
   '/api/github-contributions': typeof ApiGithubContributionsRoute;
   '/blog/$slug': typeof BlogSlugRoute;
@@ -50,6 +64,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
+  '/atom.xml': typeof AtomDotxmlRoute;
+  '/feed.json': typeof FeedDotjsonRoute;
   '/rss.xml': typeof RssDotxmlRoute;
   '/api/github-contributions': typeof ApiGithubContributionsRoute;
   '/blog/$slug': typeof BlogSlugRoute;
@@ -58,6 +74,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
+  '/atom.xml': typeof AtomDotxmlRoute;
+  '/feed.json': typeof FeedDotjsonRoute;
   '/rss.xml': typeof RssDotxmlRoute;
   '/api/github-contributions': typeof ApiGithubContributionsRoute;
   '/blog/$slug': typeof BlogSlugRoute;
@@ -67,15 +85,26 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
+    | '/atom.xml'
+    | '/feed.json'
     | '/rss.xml'
     | '/api/github-contributions'
     | '/blog/$slug'
     | '/blog';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/rss.xml' | '/api/github-contributions' | '/blog/$slug' | '/blog';
+  to:
+    | '/'
+    | '/atom.xml'
+    | '/feed.json'
+    | '/rss.xml'
+    | '/api/github-contributions'
+    | '/blog/$slug'
+    | '/blog';
   id:
     | '__root__'
     | '/'
+    | '/atom.xml'
+    | '/feed.json'
     | '/rss.xml'
     | '/api/github-contributions'
     | '/blog/$slug'
@@ -84,6 +113,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  AtomDotxmlRoute: typeof AtomDotxmlRoute;
+  FeedDotjsonRoute: typeof FeedDotjsonRoute;
   RssDotxmlRoute: typeof RssDotxmlRoute;
   ApiGithubContributionsRoute: typeof ApiGithubContributionsRoute;
   BlogSlugRoute: typeof BlogSlugRoute;
@@ -97,6 +128,20 @@ declare module '@tanstack/react-router' {
       path: '/rss.xml';
       fullPath: '/rss.xml';
       preLoaderRoute: typeof RssDotxmlRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/feed.json': {
+      id: '/feed.json';
+      path: '/feed.json';
+      fullPath: '/feed.json';
+      preLoaderRoute: typeof FeedDotjsonRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/atom.xml': {
+      id: '/atom.xml';
+      path: '/atom.xml';
+      fullPath: '/atom.xml';
+      preLoaderRoute: typeof AtomDotxmlRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/': {
@@ -132,6 +177,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AtomDotxmlRoute: AtomDotxmlRoute,
+  FeedDotjsonRoute: FeedDotjsonRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   ApiGithubContributionsRoute: ApiGithubContributionsRoute,
   BlogSlugRoute: BlogSlugRoute,

@@ -25,9 +25,15 @@ const config = defineConfig({
       pages: [
         {
           path: '/rss.xml',
-          prerender: {
-            enabled: true
-          }
+          prerender: { enabled: true }
+        },
+        {
+          path: '/atom.xml',
+          prerender: { enabled: true }
+        },
+        {
+          path: '/feed.json',
+          prerender: { enabled: true }
         }
       ]
     }),

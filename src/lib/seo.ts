@@ -28,6 +28,11 @@ export interface SEOConfig {
   ogImageAlt?: string;
 }
 
+type SEOHeadLink = Pick<
+  React.DetailedHTMLProps<React.LinkHTMLAttributes<HTMLLinkElement>, HTMLLinkElement>,
+  'rel' | 'href' | 'type' | 'sizes' | 'hrefLang' | 'title'
+>;
+
 export interface SEOHeadReturn {
   meta: Array<{
     name?: string;
@@ -38,7 +43,7 @@ export interface SEOHeadReturn {
     rel?: string;
     href?: string;
   }>;
-  links: Array<{ rel: string; href: string; type?: string; sizes?: string; hreflang?: string }>;
+  links: Array<SEOHeadLink>;
 }
 
 const DEFAULT_CONFIG: Required<
@@ -68,13 +73,7 @@ export function createSEOHead(config: SEOConfig = {}): SEOHeadReturn {
     rel?: string;
     href?: string;
   }> = [];
-  const links: Array<{
-    rel: string;
-    href: string;
-    type?: string;
-    sizes?: string;
-    hreflang?: string;
-  }> = [];
+  const links: Array<SEOHeadLink> = [];
 
   // Basic meta tags
   meta.push({ charSet: 'utf-8' });
@@ -199,9 +198,28 @@ export function createSEOHead(config: SEOConfig = {}): SEOHeadReturn {
   // Alternate locales
   if (mergedConfig.alternateLocales && mergedConfig.alternateLocales.length > 0) {
     mergedConfig.alternateLocales.forEach((locale) => {
-      links.push({ rel: 'alternate', href: `${BASE_URL}/${locale}`, hreflang: locale });
+      links.push({ rel: 'alternate', href: `${BASE_URL}/${locale}`, hrefLang: locale });
     });
   }
+
+  links.push({
+    rel: 'alternate',
+    href: `${BASE_URL}/rss.xml`,
+    type: 'application/rss+xml',
+    title: 'RSS Feed'
+  });
+  links.push({
+    rel: 'alternate',
+    href: `${BASE_URL}/atom.xml`,
+    type: 'application/atom+xml',
+    title: 'Atom Feed'
+  });
+  links.push({
+    rel: 'alternate',
+    href: `${BASE_URL}/feed.json`,
+    type: 'application/feed+json',
+    title: 'JSON Feed'
+  });
 
   return { meta, links };
 }

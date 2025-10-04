@@ -13,7 +13,19 @@
  */
 export const browser = typeof window !== 'undefined';
 
+/**
+ * Whether the code is running in a development environment.
+ *
+ * @returns {boolean} True if running in a development environment, false if running on the server.
+ */
 export const dev = import.meta.env.DEV;
+
+/**
+ * The base URL of the website.
+ *
+ * @returns {string} The base URL of the website.
+ */
+export const BASE_URL = dev ? 'http://localhost:3000' : 'https://plckr.dev';
 
 export const WORK_POSITION = 'full stack engineer';
 
