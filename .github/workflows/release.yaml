@@ -37,7 +37,7 @@ jobs:
         uses: changesets/action@v1
         with:
           publish: pnpm release
-          commit: "chore(release): version package"
-          title: "chore(release): version package"
+          commit: 'chore(release): version package'
+          title: 'chore(release): version package'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
