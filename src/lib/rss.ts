@@ -22,7 +22,7 @@ export function getRssFeed() {
       content: post.excerpt,
       author: [{ name: 'Ricardo Reis', link: BASE_URL }],
       date: new Date(post.date),
-      image: `${BASE_URL}${post.thumbnail.src}`
+      image: post.thumbnail ? `${BASE_URL}${post.thumbnail.src}` : undefined
     });
   });
 

@@ -41,15 +41,17 @@ function BlogPostComponent() {
   return (
     <article>
       <header>
-        <div className="relative mb-8 rounded-lg md:-mx-4">
-          <img
-            src={post.thumbnail.src}
-            width={post.thumbnail.width}
-            height={post.thumbnail.height}
-            alt={post.title}
-            className="rounded-lg"
-          />
-        </div>
+        {post.thumbnail && (
+          <div className="relative mb-8 rounded-lg md:-mx-4">
+            <img
+              src={post.thumbnail.src}
+              width={post.thumbnail.width}
+              height={post.thumbnail.height}
+              alt={post.title}
+              className="rounded-lg"
+            />
+          </div>
+        )}
 
         <h1 className="text-3xl font-extrabold">{post.title}</h1>
         <p className="mt-1 opacity-70 dark:opacity-50">{post.excerpt}</p>

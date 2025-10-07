@@ -20,7 +20,8 @@
     "velite:watch": "velite dev --watch",
     "velite:build": "velite build",
     "prepare": "husky",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "changeset": "changeset"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
