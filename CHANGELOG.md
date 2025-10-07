@@ -1,5 +1,11 @@
 # plckr.dev
 
+## 1.2.0
+
+### Minor Changes
+
+- 2c1dbc4: New blog post > Storyblok best practices
+
 ## 1.1.0
 
 ### Minor Changes
