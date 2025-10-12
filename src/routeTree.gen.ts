@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index';
 import { Route as BlogIndexRouteImport } from './routes/blog/index';
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug';
 import { Route as ApiGithubContributionsRouteImport } from './routes/api/github-contributions';
+import { Route as ApiPostsSlugClapsRouteImport } from './routes/api/posts.$slug.claps';
 
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
   id: '/rss.xml',
@@ -52,6 +53,11 @@ const ApiGithubContributionsRoute = ApiGithubContributionsRouteImport.update({
   path: '/api/github-contributions',
   getParentRoute: () => rootRouteImport,
 } as any);
+const ApiPostsSlugClapsRoute = ApiPostsSlugClapsRouteImport.update({
+  id: '/api/posts/$slug/claps',
+  path: '/api/posts/$slug/claps',
+  getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/api/github-contributions': typeof ApiGithubContributionsRoute;
   '/blog/$slug': typeof BlogSlugRoute;
   '/blog': typeof BlogIndexRoute;
+  '/api/posts/$slug/claps': typeof ApiPostsSlugClapsRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/api/github-contributions': typeof ApiGithubContributionsRoute;
   '/blog/$slug': typeof BlogSlugRoute;
   '/blog': typeof BlogIndexRoute;
+  '/api/posts/$slug/claps': typeof ApiPostsSlugClapsRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/api/github-contributions': typeof ApiGithubContributionsRoute;
   '/blog/$slug': typeof BlogSlugRoute;
   '/blog/': typeof BlogIndexRoute;
+  '/api/posts/$slug/claps': typeof ApiPostsSlugClapsRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
@@ -90,7 +99,8 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/api/github-contributions'
     | '/blog/$slug'
-    | '/blog';
+    | '/blog'
+    | '/api/posts/$slug/claps';
   fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
@@ -99,7 +109,8 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/api/github-contributions'
     | '/blog/$slug'
-    | '/blog';
+    | '/blog'
+    | '/api/posts/$slug/claps';
   id:
     | '__root__'
     | '/'
@@ -108,7 +119,8 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/api/github-contributions'
     | '/blog/$slug'
-    | '/blog/';
+    | '/blog/'
+    | '/api/posts/$slug/claps';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   ApiGithubContributionsRoute: typeof ApiGithubContributionsRoute;
   BlogSlugRoute: typeof BlogSlugRoute;
   BlogIndexRoute: typeof BlogIndexRoute;
+  ApiPostsSlugClapsRoute: typeof ApiPostsSlugClapsRoute;
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGithubContributionsRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/api/posts/$slug/claps': {
+      id: '/api/posts/$slug/claps';
+      path: '/api/posts/$slug/claps';
+      fullPath: '/api/posts/$slug/claps';
+      preLoaderRoute: typeof ApiPostsSlugClapsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiGithubContributionsRoute: ApiGithubContributionsRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
+  ApiPostsSlugClapsRoute: ApiPostsSlugClapsRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
