@@ -86,16 +86,16 @@ export const Route = createFileRoute('/api/posts/$slug/claps')({
       PATCH: async ({ params, request, context }) => {
         const { slug } = params;
 
-        const bodyJson = await request.json();
-        const bodyCount: number = bodyJson.count;
-        const sessionId = context.sessionId;
+        const bodyJson = postClapSchema.pick({ claps_count: true }).parse(await request.json());
 
-        const postClap = await getPostClap(slug, sessionId);
+        const newCount = bodyJson.claps_count;
 
-        const newCount = Math.min((postClap.sessionCount ?? 0) + bodyCount, SESSION_MAX_COUNT);
+        if (newCount > SESSION_MAX_COUNT) {
+          return new Response('Claps count is greater than the session max count', { status: 400 });
+        }
 
         try {
-          await upsertSessionPostClap(slug, sessionId, newCount);
+          await upsertSessionPostClap(slug, context.sessionId, newCount);
           return new Response('', { status: 200 });
         } catch (error) {
           console.error('Invalid return from database', error);
