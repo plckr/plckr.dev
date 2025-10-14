@@ -1,7 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePostHog } from 'posthog-js/react';
+import { useCallback } from 'react';
 
 import type { PostClapResult } from '~/routes/api/posts.$slug.claps';
+
+import { useDebounce } from './debounce';
 
 const MAIN_QUERY_KEY = 'post-claps' as const;
 
@@ -36,7 +39,7 @@ function usePostClapsQuery({ postSlug, sessionId }: { postSlug: string; sessionI
 function updateClapMutation({ postSlug, sessionId }: { postSlug: string; sessionId: string }) {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: async (clapsCount: number) => {
       return fetch(`/api/posts/${postSlug}/claps`, {
         method: 'PATCH',
@@ -49,21 +52,34 @@ function updateClapMutation({ postSlug, sessionId }: { postSlug: string; session
         })
       });
     },
-    onMutate: (clapsCount) => {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey() });
+    }
+  });
+
+  const debouncedMutate = useDebounce(mutation.mutate, 1000);
+
+  const optimisticMutate = useCallback(
+    (clapsCount: number) => {
       queryClient.setQueryData<PostClapResult>(queryKey({ postSlug, sessionId }), (oldData) => {
         if (!oldData) return undefined;
 
         return {
           ...oldData,
-          count: oldData.count - (oldData.sessionCount ?? 0) + clapsCount,
+          count: oldData.count - oldData.sessionCount + clapsCount,
           sessionCount: clapsCount
         };
       });
+
+      debouncedMutate(clapsCount);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKey() });
-    }
-  });
+    [debouncedMutate, postSlug, sessionId, queryClient]
+  );
+
+  return {
+    ...mutation,
+    mutate: optimisticMutate
+  };
 }
 
 export function usePostClaps(postSlug: string) {
