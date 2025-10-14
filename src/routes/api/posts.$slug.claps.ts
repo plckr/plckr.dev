@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { createMiddleware, json } from '@tanstack/react-start';
-import * as z from 'zod/v4';
+import * as z from 'zod';
 
 import { supabase } from '~/lib/supabase.server';
 
