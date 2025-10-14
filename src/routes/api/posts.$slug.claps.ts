@@ -13,10 +13,10 @@ const postClapSchema = z.object({
   created_at: z.string()
 });
 
-type PostClapResult = {
+export type PostClapResult = {
   postSlug: string;
   count: number;
-  sessionCount: number | null;
+  sessionCount: number;
   sessionMaxCount: number;
 };
 
@@ -38,7 +38,7 @@ async function getPostClap(postSlug: string, sessionId?: string | null): Promise
 
   const sessionCount = postClapSchema
     .nullable()
-    .transform((data) => data?.claps_count ?? null)
+    .transform((data) => data?.claps_count ?? 0)
     .parse(sessionResult.data);
 
   return {
