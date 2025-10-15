@@ -20,7 +20,7 @@ export type PostClapResult = {
   sessionMaxCount: number;
 };
 
-async function getPostClap(postSlug: string, sessionId?: string | null): Promise<PostClapResult> {
+async function getPostClap(postSlug: string, sessionId: string): Promise<PostClapResult> {
   const [totalResult, sessionResult] = await Promise.all([
     supabase.from('post_claps').select('claps_count.sum()').eq('post_slug', postSlug).maybeSingle(),
     supabase
@@ -36,24 +36,19 @@ async function getPostClap(postSlug: string, sessionId?: string | null): Promise
     console.error('Error getting post clap', error);
   }
 
-  const sessionCount = postClapSchema
-    .nullable()
-    .transform((data) => data?.claps_count ?? 0)
-    .parse(sessionResult.data);
-
   return {
     postSlug,
     count: totalResult.data?.sum ?? 0,
-    sessionCount,
+    sessionCount: sessionResult.data?.claps_count ?? 0,
     sessionMaxCount: SESSION_MAX_COUNT
-  } satisfies PostClapResult;
+  };
 }
 
 async function upsertSessionPostClap(
   postSlug: string,
-  sessionId: string | null,
+  sessionId: string,
   clapsCount: number
-) {
+): Promise<void> {
   const { error } = await supabase
     .from('post_claps')
     .upsert({
@@ -74,6 +69,11 @@ export const Route = createFileRoute('/api/posts/$slug/claps')({
     middleware: [
       createMiddleware().server(async ({ next, request }) => {
         const sessionId = request.headers.get('X-POSTHOG-SESSION-ID');
+
+        if (!sessionId) {
+          throw new Response('Missing Session ID', { status: 400 });
+        }
+
         return next({ context: { sessionId } });
       })
     ],
@@ -87,19 +87,14 @@ export const Route = createFileRoute('/api/posts/$slug/claps')({
         const { slug } = params;
 
         const bodyJson = postClapSchema.pick({ claps_count: true }).parse(await request.json());
-
-        const newCount = bodyJson.claps_count;
-
-        if (newCount > SESSION_MAX_COUNT) {
-          return new Response('Claps count is greater than the session max count', { status: 400 });
-        }
+        const newCount = Math.min(bodyJson.claps_count, SESSION_MAX_COUNT);
 
         try {
           await upsertSessionPostClap(slug, context.sessionId, newCount);
           return new Response('', { status: 200 });
         } catch (error) {
           console.error('Invalid return from database', error);
-          return new Response('', { status: 500 });
+          return new Response('An unknown error occurred', { status: 500 });
         }
       }
     }
