@@ -42,7 +42,7 @@ function BlogPostComponent() {
   return (
     <div>
       <ClientOnly>
-        <ClapsButton postSlug={post.slug} />
+        <ClapsButton postSlug={post.slug} className="z-10" />
       </ClientOnly>
 
       <article>

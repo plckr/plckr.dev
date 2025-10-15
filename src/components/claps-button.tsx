@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { HTMLAttributes, useEffect, useRef, useState } from 'react';
 
 import { usePostClaps } from '~/lib/post-claps';
 import { cn, getNextFibonacci } from '~/lib/utils';
@@ -46,7 +46,11 @@ function ClapIcon({ className }: { className?: string }) {
   );
 }
 
-function AnimatedNumber({ value }: { value: number }) {
+function AnimatedNumber({
+  className,
+  children: value,
+  ...props
+}: Omit<HTMLAttributes<HTMLSpanElement>, 'children'> & { children: number }) {
   const [displayValue, setDisplayValue] = useState(value);
   const prevValueRef = useRef(value);
 
@@ -75,10 +79,14 @@ function AnimatedNumber({ value }: { value: number }) {
     return () => clearInterval(timer);
   }, [value]);
 
-  return <span>{displayValue}</span>;
+  return (
+    <span className={className} {...props}>
+      {displayValue}
+    </span>
+  );
 }
 
-export function ClapsButton({ postSlug }: { postSlug: string }) {
+export function ClapsButton({ postSlug, className }: { postSlug: string; className?: string }) {
   const claps = usePostClaps(postSlug);
 
   const currentCount = claps.data?.count ?? 0;
@@ -100,18 +108,22 @@ export function ClapsButton({ postSlug }: { postSlug: string }) {
   return (
     <div
       className={cn(
-        'fixed right-4 bottom-4 flex items-center gap-3 duration-700 motion-safe:transition-all',
-        claps.isLoading && 'translate-y-4 opacity-0'
+        'fixed right-4 bottom-4 flex flex-col items-center gap-2 duration-700 motion-safe:transition-all lg:flex-row lg:gap-3',
+        claps.isLoading && 'translate-y-4 opacity-0',
+        className
       )}
     >
-      <span
+      <AnimatedNumber
         className={cn(
-          'text-foreground pointer-events-none text-sm font-semibold tabular-nums duration-300 select-none motion-safe:transition-colors',
-          currentCount <= 0 && 'text-foreground/0'
+          'bg-background/50 block rounded-sm px-1.5 py-0.5 backdrop-blur-md',
+          'text-foreground text-sm font-semibold',
+          'pointer-events-none tabular-nums select-none',
+          'duration-300 motion-safe:transition-opacity',
+          currentCount <= 0 && 'opacity-0'
         )}
       >
-        <AnimatedNumber value={currentCount} />
-      </span>
+        {currentCount}
+      </AnimatedNumber>
 
       <div className="relative isolate size-9">
         <svg
