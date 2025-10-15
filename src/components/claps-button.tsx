@@ -155,7 +155,8 @@ export function ClapsButton({ postSlug, className }: { postSlug: string; classNa
             'relative size-9 rounded-full',
             'transition-all duration-200',
             'hover:scale-105 hover:shadow-lg',
-            'active:scale-90'
+            'active:scale-90',
+            'before:bg-background before:absolute before:-inset-0.5 before:rounded-full'
           )}
         >
           <ClapIcon className="relative z-10 size-6" />
