@@ -1,6 +1,7 @@
-import { createFileRoute, notFound } from '@tanstack/react-router';
+import { ClientOnly, createFileRoute, notFound } from '@tanstack/react-router';
 import { posts } from '~local-content';
 
+import { ClapsButton } from '~/components/claps-button';
 import ErrorSection from '~/components/error-section';
 import { MDXContent } from '~/components/mdx-content';
 import { createBlogPostSEO, createSEOHead } from '~/lib/seo';
@@ -39,39 +40,47 @@ function BlogPostComponent() {
   const { post } = Route.useLoaderData();
 
   return (
-    <article>
-      <header>
-        {post.thumbnail && (
-          <div className="relative mb-8 rounded-lg md:-mx-4">
-            <img
-              src={post.thumbnail.src}
-              width={post.thumbnail.width}
-              height={post.thumbnail.height}
-              alt={post.title}
-              className="rounded-lg"
-            />
+    <div>
+      <ClientOnly>
+        <ClapsButton postSlug={post.slug} className="z-10" />
+      </ClientOnly>
+
+      <article>
+        <header>
+          {post.thumbnail && (
+            <div className="relative mb-8 rounded-lg md:-mx-4">
+              <img
+                src={post.thumbnail.src}
+                width={post.thumbnail.width}
+                height={post.thumbnail.height}
+                alt={post.title}
+                className="rounded-lg"
+              />
+            </div>
+          )}
+
+          <h1 className="text-3xl font-extrabold">{post.title}</h1>
+          <p className="mt-1 opacity-70 dark:opacity-50">{post.excerpt}</p>
+
+          <div className="mt-2 flex items-center space-x-2 text-sm opacity-60 dark:opacity-40">
+            <time dateTime={post.date}>
+              {new Date(post.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </time>
+            <span>·</span>
+            <span>{post.metadata.readingTime} min read</span>
           </div>
-        )}
+        </header>
 
-        <h1 className="text-3xl font-extrabold">{post.title}</h1>
-        <p className="mt-1 opacity-70 dark:opacity-50">{post.excerpt}</p>
-
-        <div className="mt-2 flex items-center space-x-2 text-sm opacity-60 dark:opacity-40">
-          <time dateTime={post.date}>
-            {new Date(post.date).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </time>
-          <span>·</span>
-          <span>{post.metadata.readingTime} min read</span>
+        <div className="prose prose-sm dark:prose-invert mt-12 max-w-full">
+          <ClientOnly>
+            <MDXContent code={post.mdx} />
+          </ClientOnly>
         </div>
-      </header>
-
-      <div className="prose prose-sm dark:prose-invert mt-12 max-w-full">
-        <MDXContent code={post.mdx} />
-      </div>
-    </article>
+      </article>
+    </div>
   );
 }

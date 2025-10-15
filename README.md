@@ -112,6 +112,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ```bash
 VITE_PUBLIC_POSTHOG_KEY=your_posthog_key_here
 VITE_PUBLIC_POSTHOG_HOST=your_posthog_host_here
+VITE_SUPABASE_URL=your_supabase_url_here
+VITE_SUPABASE_KEY=your_supabase_key_here
 ```
 
 ---
