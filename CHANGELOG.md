@@ -1,5 +1,11 @@
 # plckr.dev
 
+## 1.3.1
+
+### Patch Changes
+
+- 4c5a6f6: Upgrade @tanstack dependencies
+
 ## 1.3.0
 
 ### Minor Changes
