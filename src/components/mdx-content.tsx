@@ -41,7 +41,7 @@ const markdownComponents: {
     );
   },
   pre: ({ children }) => {
-    return <pre>{children}</pre>;
+    return <pre className="not-prose mb-5">{children}</pre>;
   },
   code: (props) => {
     const code = props.children.replace(/\n$/, '');
@@ -49,7 +49,7 @@ const markdownComponents: {
     // For inline code style
     if (code.split('\n').length === 1) {
       return (
-        <code className="not-prose bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+        <code className="bg-muted relative rounded p-0.5 font-mono text-sm font-semibold">
           {code}
         </code>
       );
