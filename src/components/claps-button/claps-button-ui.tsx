@@ -9,7 +9,7 @@ type Props = {
   count: number;
   progress: number;
   hidden?: boolean;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
 };
 

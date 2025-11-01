@@ -3,7 +3,7 @@ import { posts } from '~local-content';
 
 import { ClapsButton } from '~/components/claps-button';
 import ErrorSection from '~/components/error-section';
-import { MDXContent } from '~/components/mdx-content';
+import { MDXContent } from '~/components/mdx';
 import { createBlogPostSEO, createSEOHead } from '~/lib/seo';
 
 export const Route = createFileRoute('/blog/$slug')({

@@ -8,8 +8,9 @@ import {
   CodeBlockContent,
   CodeBlockCopyButton,
   CodeBlockItem
-} from './ui/kibo-ui/code-block';
-import { ImageZoom } from './ui/kibo-ui/image-zoom';
+} from '../ui/kibo-ui/code-block';
+import { ImageZoom } from '../ui/kibo-ui/image-zoom';
+import { components as sharedComponents } from './components';
 
 type MarkdownComponentsProps = {
   a: { href: string; children: string };
@@ -67,7 +68,11 @@ const markdownComponents: {
       >
         <CodeBlockBody className="relative">
           {(item) => (
-            <CodeBlockItem key={item.language} value={item.language}>
+            <CodeBlockItem
+              key={item.language}
+              value={item.language}
+              className="max-h-[32rem] overflow-y-auto"
+            >
               <CodeBlockContent language={item.language as BundledLanguage}>
                 {item.code}
               </CodeBlockContent>
@@ -80,11 +85,6 @@ const markdownComponents: {
   }
 };
 
-const sharedComponents: Record<string, (props: any) => React.ReactNode> = {
-  // To add shared components
-};
-
-// parse the Velite generated MDX code into a React component function
 const useMDXComponent = (code: string) => {
   const fn = new Function(code);
   return fn({ ...runtime }).default;
@@ -95,7 +95,6 @@ interface MDXProps {
   components?: Record<string, React.ComponentType>;
 }
 
-// MDXContent component
 export const MDXContent = ({ code, components }: MDXProps) => {
   const Component = useMDXComponent(code);
   return <Component components={{ ...markdownComponents, ...sharedComponents, ...components }} />;
