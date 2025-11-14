@@ -282,7 +282,7 @@ export function createBlogPostSEO(post: {
   const publishedTime = new Date(post.date).toISOString();
   const imageUrl = post.thumbnail?.src
     ? `${BASE_URL}${post.thumbnail.src}`
-    : `${BASE_URL}/og-blog.jpg`;
+    : `${BASE_URL}/og-image.jpg`;
 
   return {
     title: post.title,

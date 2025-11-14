@@ -23,7 +23,7 @@ export default defineConfig({
   collections: {
     posts: {
       name: 'Post',
-      pattern: '**.md',
+      pattern: ['**.md', '**.mdx'],
       schema: s.object({
         slug: s.path().transform((value) => {
           const [indexOrSlug, slug] = value.split('.');

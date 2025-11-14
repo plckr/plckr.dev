@@ -12,3 +12,5 @@ count.txt
 
 .velite
 public/static
+*storybook.log
+storybook-static

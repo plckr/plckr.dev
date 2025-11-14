@@ -1,0 +1,307 @@
+---
+title: A Fibonacci-Based Clap System
+excerpt: Building an interactive clap system with progressive value scaling, optimistic updates, and session-based limiting using React and Supabase.
+date: 2025-10-17
+---
+
+<ClapsButtonAssembly />
+
+# Introduction
+
+After launching my blog, I wanted a way for readers to appreciate my articles. Usually this is done with a Like system, like you see on social media. But I wanted something different - I wanted readers to express _how much_ they enjoyed an article, not just a binary yes/no.
+
+> **The problem with traditional likes?** They're binary. You either like it or you don't. But what if you loved it? What if the article really helped you out? How do you express that?
+
+I wanted readers to be able to show something like:
+
+- 👍 Not bad
+- ❤️ I like it
+- 🔥 Loved it!
+- ⭐ Amazing
+- 🙏 This helped me so much!
+- 🚀 Dude, keep writing!!
+
+In this article I'll walk through how I built this, both frontend and backend. You'll see how I created a progressive clap system based on Fibonacci, with optimistic updates and session-based limiting.
+
+# 1. Solution Requirements
+
+Before jumping into the implementation, I defined the essential requirements:
+
+- **Progressive Voting (not binary)**
+
+  I opted for [Fibonacci Sequence](https://en.wikipedia.org/wiki/Fibonacci_sequence), but could be any other sequence.
+
+  In my case: **1 → 2 → 3 → 5 → 8 → 13**
+
+> Why Fibonacci? It creates a natural progression where each clap has more "weight" than the previous one.
+
+- **Bigger Like Numbers**
+
+  Since I'm not a pop star and don't expect tons of followers reading and liking my articles, I wanted to be able to show a considerable number of claps. That way when someone lands on an article, there's a good chance they see a reasonable amount of clap count. A bit of a cheat, I know 😂
+
+- **Maximum Limit per Session**
+
+  Each session has a clap limit to prevent spam.
+
+- **No Login Required**
+
+  Use session-based identification. I want it to be easy to use - no friction, no account creation.
+
+- **No Take-Backs**
+
+  Just like in real life, you can't "un-clap". Once you click, it's permanent. This creates a more meaningful commitment with each clap.
+
+# 2. Building the Backend
+
+For the backend, I went with **Supabase** - it has a generous free tier and provides a SQL database, which is exactly what I need.
+
+## 2.1. The Database Schema
+
+The database structure is simple but effective. The key is using a **composite primary key** of `post_slug` + `session_id`:
+
+Opted for this approach because each session can only have one record per article, fast database lookups, facilitated upserts and easier aggregations for counting totals.
+
+```sql
+create table "public"."post_claps" (
+    "post_slug" character varying not null,
+    "claps_count" integer not null,
+    "created_at" timestamp with time zone DEFAULT now() not null,
+    "session_id" character varying not null
+);
+
+alter table only "public"."post_claps"
+  add constraint "post_claps_pkey"
+  primary key ("post_slug", "session_id");
+
+alter table "public"."post_claps" enable row level security;
+
+-- code below is necessary to do Supabase .sum() operations
+alter role authenticator set pgrst.db_aggregates_enabled = 'true';
+```
+
+## 2.2. The API Routes
+
+I only need 2 endpoints:
+
+- **GET** - Fetch total claps + current session claps + limit
+- **PATCH** - Update session claps
+
+### GET /api/posts/\<slug\>/claps
+
+This endpoint returns the article's total claps and the current session's clap count.
+
+```ts
+// GET /api/posts/<slug>/claps
+
+export const GET = async ({ params }) => {
+  const { slug } = params;
+  const sessionId = getSessionId();
+
+  const [totalResult, sessionResult] = await Promise.all([
+    supabase.from('post_claps').select('claps_count.sum()').eq('post_slug', slug).maybeSingle(),
+    supabase
+      .from('post_claps')
+      .select('*')
+      .eq('post_slug', slug)
+      .eq('session_id', sessionId)
+      .maybeSingle()
+  ]);
+
+  return json({
+    postSlug: slug,
+    count: totalResult.data?.sum ?? 0,
+    sessionCount: sessionResult.data?.claps_count ?? 0,
+    sessionMaxCount: SESSION_MAX_COUNT
+  });
+};
+```
+
+💡 Notice the `claps_count.sum()`, it's a Supabase specific function to return the sum of `claps_count` from all rows.
+
+### PATCH /api/posts/\<slug\>/claps
+
+To update claps, I use an `upsert` - if the record exists, it updates; if not, it creates a new one:
+
+```ts
+// PATCH /api/posts/<slug>/claps
+
+export const PATCH = async ({ params, request }) => {
+  const { slug } = params;
+  const sessionId = getSessionId();
+  const { claps_count } = await request.json();
+  // ensure we don't exceed the maximum limit
+  const newCount = Math.min(claps_count, SESSION_MAX_COUNT);
+
+  await supabase.from('post_claps').upsert({
+    post_slug: slug,
+    claps_count: newCount,
+    posthog_session_id: sessionId
+  });
+
+  return new Response('', { status: 200 });
+};
+```
+
+# 3. Building the Interface
+
+Now comes the fun part - creating the UI!
+
+**My vision:** A floating button in the corner of the screen with a circular progress bar that grows as you click. Visual, satisfying, and intuitive.
+
+## 3.1. The Visual Components
+
+I split the implementation into 3 main components:
+
+1. **Number animation** - To show the total claps for the article
+2. **Circular progress bar** - Visual feedback of progress (current session)
+3. **Clap button** - The interactive element
+
+### Number Animation
+
+When the clap count changes, I want a smooth transition, not an abrupt jump.
+
+```tsx
+function AnimatedNumber({ value }) {
+  const [displayValue, setDisplayValue] = useState(value);
+  const prevValueRef = useRef(value);
+
+  useEffect(() => {
+    const prevValue = prevValueRef.current;
+    if (prevValue === value) return;
+
+    const durationMs = 400;
+    const steps = 20;
+    const stepDuration = durationMs / steps;
+    const increment = (value - prevValue) / steps;
+    let currentStep = 0;
+
+    const timer = setInterval(() => {
+      currentStep++;
+      if (currentStep >= steps) {
+        setDisplayValue(value);
+        clearInterval(timer);
+      } else {
+        setDisplayValue(Math.round(prevValue + increment * currentStep));
+      }
+    }, stepDuration);
+
+    prevValueRef.current = value;
+
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return <span>{displayValue}</span>;
+}
+```
+
+**How it works:**
+
+- Splits the animation into 20 steps
+- Each step gradually increments the value
+
+### Circular Progress Bar
+
+The progress bar uses SVG to draw a circle that fills as you click. The trick is using `strokeDasharray` and `strokeDashoffset`:
+
+```tsx
+const RADIUS = 18;
+const DIAMETER = RADIUS * 2;
+const STROKE_WIDTH = 2;
+const SIZE = DIAMETER + STROKE_WIDTH;
+const PERIMETER = DIAMETER * Math.PI;
+
+function ProgressCircle({ percentage }) {
+  const strokeOffset = -0.25 * PERIMETER; // to start at the bottom center
+  const strokeDash = PERIMETER * percentage;
+  const strokeGap = PERIMETER - strokeDash;
+
+  return (
+    <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} stroke="currentColor">
+      <circle
+        cx={SIZE / 2}
+        cy={SIZE / 2}
+        r={RADIUS}
+        fill="none"
+        stroke="currentStroke"
+        strokeWidth={STROKE_WIDTH}
+        strokeDasharray={`${strokeDash} ${strokeGap}`}
+        strokeDashoffset={strokeOffset}
+        strokeLinecap="round"
+        style={{
+          transitionProperty: 'all',
+          transitionDuration: '500ms',
+          transitionTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
+        }}
+      />
+    </svg>
+  );
+}
+```
+
+## 3.2. Putting It All Together
+
+Now I combine everything into a simple structure:
+
+```tsx
+// Flex container
+<div>
+  <AnimatedNumber value={sessionCount} />
+  {/* Button container */}
+  <div>
+    <ProgressCircle percentage={sessionCount / sessionMaxCount} />
+    <Button onClick={handleClap} />
+  </div>
+</div>
+```
+
+The progress bar sits behind the button, creating a visual effect where the circle "grows" around the button as you click.
+
+## 3.3. Interactive Demo
+
+Try clicking the button below to see all components working together:
+
+<ClapsButtonAssembly assembleMode />
+
+Notice how:
+
+- The number animates smoothly
+- The progress bar grows in a circular motion
+- Each click has immediate visual feedback
+
+# 4. Connecting Everything
+
+Now that I have the backend and frontend, I need to connect them. The strategy is quite simple:
+
+## 4.1. State Management
+
+I'm a big fan of **TanStack** products, so for this I picked the [**TanStack Query**](https://tanstack.com/query), it's a well made library for server state management and data fetching, it has easy way to caching and refetching. Also it's great for optimistic updates.
+
+## 4.2. Debouncing
+
+When someone clicks rapidly multiple times, I don't want to make an API call for each click. I implemented a **1 second debounce**:
+
+```tsx
+const handleClick = () => {
+  const nextCount = getNextClapsValue(sessionCount); // Fibonacci sequence
+  if (nextCount > sessionMaxCount) return;
+
+  // Update UI immediately (optimistic update)
+  claps.updateCount(nextCount);
+
+  // Debounce sends to backend only after 1s of inactivity
+};
+```
+
+**In sum, this is the flow:**
+
+1. User clicks the button
+2. Calculate the next value in the Fibonacci sequence
+3. Check if it hasn't exceeded the limit
+4. Update the UI immediately (optimistic update)
+5. Debounce waits 1s
+6. If there are no more clicks, send to backend
+7. Backend confirms and updates the database
+
+# Conclusion
+
+And that's it! I built a complete clap system that allowed people to interact with my blog. I'm proud of the end result, and expect that you liked it too.
