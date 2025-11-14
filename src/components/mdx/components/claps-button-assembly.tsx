@@ -6,7 +6,7 @@ import { ProgressCircle } from '~/components/claps-button/progress-circle';
 import { Button } from '~/components/ui/button';
 import { cn, getNextFibonacci } from '~/lib/utils';
 
-export function ClapsButtonAssembly() {
+export function ClapsButtonAssembly({ assembleMode = false }: { assembleMode?: boolean }) {
   const [count, setCount] = useState(3);
   const [assembled, setAssembled] = useState(true);
 
@@ -24,9 +24,11 @@ export function ClapsButtonAssembly() {
   return (
     <div className="border-border relative my-5 grid place-items-center rounded-lg border py-20 shadow-sm">
       <div className="absolute top-5 left-5 flex gap-2">
-        <Button variant="outline" onClick={() => setAssembled(!assembled)}>
-          {assembled ? 'Disassemble' : 'Assemble'}
-        </Button>
+        {assembleMode && (
+          <Button variant="outline" onClick={() => setAssembled(!assembled)}>
+            {assembled ? 'Disassemble' : 'Assemble'}
+          </Button>
+        )}
         <Button variant="outline" onClick={increaseCount}>
           {count >= maxCount ? 'Reset count' : 'Increase count'}
         </Button>
