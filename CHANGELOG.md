@@ -1,5 +1,16 @@
 # plckr.dev
 
+## 1.4.0
+
+### Minor Changes
+
+- d2a4c4e: Add Storybook
+- d2a4c4e: Add new article "Building a clap system"
+
+### Patch Changes
+
+- d2a4c4e: Improve MDX code
+
 ## 1.3.1
 
 ### Patch Changes
