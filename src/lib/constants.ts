@@ -27,7 +27,7 @@ export const dev = import.meta.env.DEV;
  */
 export const BASE_URL = dev ? 'http://localhost:3000' : 'https://plckr.dev';
 
-export const WORK_POSITION = 'full stack engineer';
+export const WORK_POSITION = 'senior software engineer';
 
 export const GITHUB_USERNAME = 'plckr';
 export const GITHUB_PROFILE_IMAGE = 'https://avatars.githubusercontent.com/u/11768109';
