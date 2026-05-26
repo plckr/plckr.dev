@@ -1,5 +1,11 @@
 # plckr.dev
 
+## 1.4.1
+
+### Patch Changes
+
+- 30136ce: Update work position to Senior Software Engineer
+
 ## 1.4.0
 
 ### Minor Changes
