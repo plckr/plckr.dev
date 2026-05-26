@@ -24,6 +24,7 @@ pnpm supabase:types   # Regenerate Supabase TypeScript types from local schema
 ```
 
 To add shadcn components:
+
 ```bash
 pnpx shadcn@latest add <component>
 ```
