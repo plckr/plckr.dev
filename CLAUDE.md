@@ -29,6 +29,23 @@ To add shadcn components:
 pnpx shadcn@latest add <component>
 ```
 
+## Releases
+
+This project uses [Changesets](https://github.com/changesets/changesets). **Every user-facing change requires a changeset** — without one it won't be included in the next GitHub release.
+
+```bash
+pnpm changeset  # interactive: pick patch/minor/major + describe the change
+```
+
+Commit the generated `.changeset/<slug>.md` alongside the change.
+
+**Release flow (automated via CI on push to `main`):**
+
+1. CI detects `.changeset/*.md` → opens `chore(release): version package` PR bumping version + changelog.
+2. Merging that PR triggers `pnpm release` → creates GitHub release + tag.
+
+**Changeset not needed for:** dependency bumps, CI/tooling config, test-only changes.
+
 ## Architecture
 
 ### Framework & Routing
