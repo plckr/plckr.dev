@@ -41,3 +41,15 @@ jobs:
           title: 'chore(release): version package'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        if: steps.changesets.outputs.published == 'false' && steps.changesets.outputs.hasChangesets == 'false'
+        run: |
+          VERSION="v$(node -p "require('./package.json').version")"
+          if ! git tag | grep -q "^${VERSION}$"; then
+            git tag "$VERSION"
+            git push origin "$VERSION"
+            gh release create "$VERSION" --title "$VERSION" --generate-notes
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
